@@ -1,32 +1,156 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/style.css">
-    <title>Peminjaman Buku Online</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+* {
+  box-sizing: border-box;
+}
+
+a {
+    text-decoration: none;
+}
+
+.row::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+[class*="col-"] {
+  float: left;
+  padding: 15px;
+}
+
+html {
+  font-family: "Lucida Sans", sans-serif;
+}
+
+.header {
+  background-color: #004E64;
+  color: #ffffff;
+  padding: 15px;
+}
+
+.menu ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.menu li {
+  padding: 8px;
+  margin-bottom: 7px;
+  background-color: #7AE582;
+  color: #ffffff;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+}
+
+.menu li:hover {
+  background-color: #25A18E;
+}
+
+.aside {
+  background-color: #7AE582;
+  padding: 15px;
+  color: #ffffff;
+  text-align: center;
+  font-size: 14px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+}
+
+.footer {
+  background-color: #004E64;
+  color: #ffffff;
+  text-align: center;
+  font-size: 12px;
+  padding: 15px;
+}
+
+/* For mobile phones: */
+[class*="col-"] {
+  width: 100%;
+}
+
+@media only screen and (min-width: 600px) {
+  /* For tablets: */
+  .col-s-1 {width: 8.33%;}
+  .col-s-2 {width: 16.66%;}
+  .col-s-3 {width: 25%;}
+  .col-s-4 {width: 33.33%;}
+  .col-s-5 {width: 41.66%;}
+  .col-s-6 {width: 50%;}
+  .col-s-7 {width: 58.33%;}
+  .col-s-8 {width: 66.66%;}
+  .col-s-9 {width: 75%;}
+  .col-s-10 {width: 83.33%;}
+  .col-s-11 {width: 91.66%;}
+  .col-s-12 {width: 100%;}
+}
+@media only screen and (min-width: 768px) {
+  /* For desktop: */
+  .col-1 {width: 8.33%;}
+  .col-2 {width: 16.66%;}
+  .col-3 {width: 25%;}
+  .col-4 {width: 33.33%;}
+  .col-5 {width: 41.66%;}
+  .col-6 {width: 50%;}
+  .col-7 {width: 58.33%;}
+  .col-8 {width: 66.66%;}
+  .col-9 {width: 75%;}
+  .col-10 {width: 83.33%;}
+  .col-11 {width: 91.66%;}
+  .col-12 {width: 100%;}
+}
+</style>
 </head>
 <body>
-    <header>
-        <h1>Peminjaman Buku Online</h1>
-    </header>
-    <main>
-        <form id="book-request-form">
-            <label for="book-title">Judul Buku:</label>
-            <input type="text" id="book-title" required>
-            <label for="book-series">Seri Buku:</label>
-            <input type="text" id="book-series" required>
-            <label for="user-name">Nama Anda:</label>
-            <input type="text" id="user-name" required>
-            <label for="user-nim">Nomor Pelajar (NIM):</label>
-            <input type="text" id="user-nim" required>
-            <label for="loan-days">Pengajuan Peminjaman untuk Berapa Hari:</label>
-            <input type="number" id="loan-days" required>
-            <button type="submit">Ajukan Peminjaman</button>
-        </form>
-        
-        <div id="confirmation"></div>
-    </main>
-    <script src="js/app.js"></script>
+
+<div class="header">
+  <h1>Amanda Dzunuri Elvira Yaniar - 21102234 - S1 IF MM4</h1>
+</div>
+
+<div class="row">
+  <div class="col-3 col-s-3 menu">
+    <ul>
+        <li><a class="active" href="#home">JS HTML DOM</a></li>
+        <li><a href="inline_script.html">Inline Script</a></li>
+        <li><a href="embedded_script.html">Embedded Script</a></li>
+        <li><a href="external_script.html">External Script</a></li>
+        <li><a href="js/DOM_Intro.html">DOM Intro</a></li>
+        <li><a href="js/DOM_Method.html">DOM Method</a></li>
+        <li><a href="js/DOM_Document.html">DOM Document</a></li>
+        <li><a href="js/DOM_Elements.html">DOM Elements</a></li>
+        <li><a href="js/DOM_HTML.html">DOM Html</a></li>
+        <li><a href="js/DOM_Forms.html">DOM Forms</a></li>
+        <li><a href="js/DOM_CSS.html">DOM CSS</a></li>
+        <li><a href="js/DOM_Animations.html">DOM Animations</a></li>
+        <li><a href="js/DOM_Events.html">DOM Events</a></li>
+        <li><a href="js/DOM_Event_Listener.html">DOM Events Listener</a></li>
+        <li><a href="js/DOM_Navigations.html">DOM Navigations</a></li>
+        <li><a href="js/DOM_Nodes.html">DOM Nodes</a></li>
+        <li><a href="js/DOM_Collections.html">DOM Collections</a></li>
+        <li><a href="js/DOM_Node_List.html">DOM Node List</a></li>
+    </ul>
+  </div>
+
+  <div class="col-6 col-s-9">
+    <h1>Modul 3</h1>
+    <p>Mata Kuliah Pemrograman Web dengan menerapkan CSS Advance</p>
+  </div>
+
+  <div class="col-3 col-s-12">
+    <div class="aside">
+      <h2>Tentang Saya</h2>
+      <p>Perkenalkan nama saya Amanda Dzunuri Elvira Yaniar, mahasiswa S1 Teknik Informatika ITTP. </p>
+      <p>Saya memiliki ketertarikan dalam bidang UI/UX Design dan Mobile Development.</p>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  <p>Resize the browser window to see how the content respond to the resizing.</p>
+</div>
+
 </body>
 </html>
