@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style.css">
+    <title>Peminjaman Buku Online</title>
+</head>
+<body>
+    <header>
+        <h1>Peminjaman Buku Online</h1>
+    </header>
+    <main>
+        <form id="book-request-form">
+            <label for="book-title">Judul Buku:</label>
+            <input type="text" id="book-title" required>
+            <label for="book-series">Seri Buku:</label>
+            <input type="text" id="book-series" required>
+            <label for="user-name">Nama Anda:</label>
+            <input type="text" id="user-name" required>
+            <label for="user-nim">Nomor Pelajar (NIM):</label>
+            <input type="text" id="user-nim" required>
+            <label for="loan-days">Pengajuan Peminjaman untuk Berapa Hari:</label>
+            <input type="number" id="loan-days" required>
+            <button type="submit">Ajukan Peminjaman</button>
+        </form>
+        
+        <div id="confirmation"></div>
+    </main>
+    <script src="js/app.js"></script>
+</body>
+</html>
