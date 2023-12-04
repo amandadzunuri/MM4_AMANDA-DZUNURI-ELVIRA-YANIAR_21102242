@@ -235,7 +235,7 @@
             $(document).ready(function(){ 
                 sessionStorage.setItem("student_id", "1139"); 
                 sessionStorage.setItem("nim", "21102242"); 
-                getQuotes('https://ppbittp.xyz/index.php/quotes/q/my_quote/'+sessionStorage.getItem("21102242"),'My Quotes');                
+                getQuotes('https://ppbittp.xyz/index.php/quotes/q/my_quote/'+sessionStorage.getItem("nim"),'My Quotes');                
             })
 
             $("#modal-input-form-image").change(function() { 
@@ -270,7 +270,7 @@
                 }) 
                 .done(function( data ) { 
                     console.log(data); 
-                    getQuotes('https://quotesbeta.tugaskelas.my.id/index.php/quotes/q/my_quote/'+sessionStorage.getItem("21102242"),'My Quotes'); 
+                    getQuotes('https://quotesbeta.tugaskelas.my.id/index.php/quotes/q/my_quote/'+sessionStorage.getItem("nim"),'My Quotes'); 
                     $('#quoteInputModal').modal('toggle'); 
                 }); 
             }
@@ -293,7 +293,7 @@
                 }) 
                 .done(function( data ) { 
                     console.log(data); 
-                    getQuotes('https://quotesbeta.tugaskelas.my.id/index.php/quotes/q/my_quote/'+sessionStorage.getItem("21102242"),'My Quotes'); 
+                    getQuotes('https://quotesbeta.tugaskelas.my.id/index.php/quotes/q/my_quote/'+sessionStorage.getItem("nim"),'My Quotes'); 
                     $('#quoteInputModal').modal('toggle'); 
                 }); 
             }
