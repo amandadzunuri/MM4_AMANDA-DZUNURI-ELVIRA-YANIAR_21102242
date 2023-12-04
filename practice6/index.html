@@ -70,8 +70,11 @@
                                     <b class="card-title" id="card-title">Title</b><br> 
                                     <small class="text-muted" id="card-name">Nama</small> 
                                     <p class="card-text" id="card-description">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p> 
-                                    <div class="d-flex justify-content-between align-items-center"> <div class="btn-group"> 
-                                        <button type="button" id="view-detail" class="btn btn-sm btn-outline-secondary">View</button> 
+                                    <div class="d-flex justify-content-between align-items-center"> 
+                                        <div class="btn-group"> 
+                                        <button type="button" id="view-detail" class="btn btn-sm btn-outline-secondary">View</button>
+                                        <button type="button" id="edit-detail" class="btn btn-sm btn-outline-primary">Edit</button>
+                                        <button type="button" id="delete-quote" class="btn btn-sm btn-outline-danger">Delete</button> 
                                     </div> 
                                     <small class="text-muted" id="card-date">9 mins</small> 
                                 </div> 
@@ -191,6 +194,7 @@
             }
             function getQuotes(utl, title){
                 var url = "https://quotesbeta.tugaskelas.my.id/index.php/quotes"; 
+                $.ajaxSetup({ cache: false });
                 var item = $( "#quote-item" ); 
                 $("#title-page").html(title); 
                 $( ".quote-item" ).remove(); 
@@ -209,20 +213,29 @@
                     myData = JSON.parse(data); 
                     for (i = 0; i < myData['quotes'].length; i++) { 
                         var item = $( "#quote-item" ).clone(); 
-                        item.find('#card-description').html(myData['quotes'][i].description);
+                        item.find('#card-description').html(myData['quotes'][i].description.replace('"','\"').replace(/\n/g,'<br />'));
                         item.removeAttr( "style" );
                         item.find('#card-img').attr('src', myData['quotes'][i].images); 
                         item.find('#card-title').html(myData['quotes'][i].title); 
                         item.find('#card-name').html(myData['quotes'][i].name + " (" + myData['quotes'][i].class + ")"); 
                         item.find('#card-date').html(myData['quotes'][i].updated); 
-                        item.find('#view-detail').attr("onClick","callModal('"+myData['quotes'][i].title+"','"+myData['quotes'][i].name+ " (" + myData['quotes'][i].class + ")','"+myData['quotes'][i].images+"','"+myData['quotes'][i].description+"')"); 
+                        item.find('#view-detail').attr("onClick","callModal(\""+myData['quotes'][i].title+"\",\""+myData['quotes'][i].name+ " (" + myData['quotes'][i].class + ")\",\""+myData['quotes'][i].images+"\",\""+myData['quotes'][i].description.replace('"','\\"').replace(/(\r\n|\n|\r)/gm,'<br>')+"\")"); 
+                        item.find('#delete-quote').attr("onClick","deleteQuote("+myData['quotes'][i].quote_id+",'"+myData['quotes'][i].title+"')"); 
+                        item.find('#edit-detail').attr("onClick","callInputModal(\"Edit Quote\",\""+myData['quotes'][i].title+"\",\""+myData['quotes'][i].description.replace('"','\\"').replace(/(\r\n|\n|\r)/gm,'<br>')+"\",\""+myData['quotes'][i].images+"\",\""+myData['quotes'][i].quote_id+"\")");
+                        if(sessionStorage.getItem("student_id")!=myData['quotes'][i].student_id){ 
+                            item.find('#edit-detail').attr("style","display: none;"); 
+                            item.find('#delete-quote').attr("style","display: none;");
+                        }
+                        
                         item.appendTo("#quote-items"); 
                     }
                 });
             }
 
             $(document).ready(function(){ 
-                sessionStorage.setItem("student_id", "{student_id_anda}"); sessionStorage.setItem("nim", "{nim_anda}"); getQuotes('https://ppbittp.xyz/index.php/quotes/q/my_quote/'+sessionStorage.getItem("nim"),'My Quotes');                
+                sessionStorage.setItem("student_id", "1139"); 
+                sessionStorage.setItem("nim", "21102242"); 
+                getQuotes('https://ppbittp.xyz/index.php/quotes/q/my_quote/'+sessionStorage.getItem("21102242"),'My Quotes');                
             })
 
             $("#modal-input-form-image").change(function() { 
@@ -257,9 +270,52 @@
                 }) 
                 .done(function( data ) { 
                     console.log(data); 
-                    getQuotes('https://quotesbeta.tugaskelas.my.id/index.php/quotes/q/my_quote/'+sessionStorage.getItem("nim"),'My Quotes'); 
+                    getQuotes('https://quotesbeta.tugaskelas.my.id/index.php/quotes/q/my_quote/'+sessionStorage.getItem("21102242"),'My Quotes'); 
                     $('#quoteInputModal').modal('toggle'); 
                 }); 
+            }
+
+            function updateQuote(data){ 
+                console.log(data); 
+                $.ajax({ 
+                    type: 'POST', 
+                    url: "https://quotesbeta.tugaskelas.my.id/index.php/quotes/q/edit/1", 
+                    dataType: "JSON", 
+                    data: new FormData(data), 
+                    processData: false, 
+                    contentType: false, 
+                    beforeSend: function( xhr ) { 
+                        xhr.overrideMimeType( "text/plain; charset=x-user-defined" ); 
+                    }, 
+                    error: function(xhr, status, error) { 
+                        console.log(xhr); 
+                    } 
+                }) 
+                .done(function( data ) { 
+                    console.log(data); 
+                    getQuotes('https://quotesbeta.tugaskelas.my.id/index.php/quotes/q/my_quote/'+sessionStorage.getItem("21102242"),'My Quotes'); 
+                    $('#quoteInputModal').modal('toggle'); 
+                }); 
+            }
+
+            function deleteQuote(quote_id,title){ 
+                var r = confirm("Delete "+title+"?"); 
+                if (r == true) { 
+                    $.ajax({ 
+                        type: 'DELETE', 
+                        url: "https://quotesbeta.tugaskelas.my.id/index.php/quotes/q/quote_id/"+quote_id, 
+                        beforeSend: function( xhr ) { 
+                            xhr.overrideMimeType( "text/plain; charset=x-user-defined" ); 
+                        }, 
+                        error: function(xhr, status, error) { 
+                            console.log(xhr); 
+                        } 
+                    }) 
+                    .done(function( data ) { 
+                        console.log(data); 
+                        getQuotes('https://quotesbeta.tugaskelas.my.id/index.php/quotes/q/my_quote/'+sessionStorage.getItem("nim"),'My Quotes'); 
+                    }); 
+                } 
             }
         </script>
     </body> 
