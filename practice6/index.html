@@ -192,8 +192,8 @@
                 $( "#modal-description" ).html(description); 
                 $( "#modal-img" ).attr('src',image); 
             }
-            function getQuotes(utl, title){
-                var url = "https://quotesbeta.tugaskelas.my.id/index.php/quotes"; 
+            function getQuotes(url, title){
+                //var url = "https://quotesbeta.tugaskelas.my.id/index.php/quotes"; 
                 $.ajaxSetup({ cache: false });
                 var item = $( "#quote-item" ); 
                 $("#title-page").html(title); 
@@ -235,7 +235,7 @@
             $(document).ready(function(){ 
                 sessionStorage.setItem("student_id", "1139"); 
                 sessionStorage.setItem("nim", "21102242"); 
-                getQuotes('https://ppbittp.xyz/index.php/quotes/q/my_quote/'+sessionStorage.getItem("nim"),'My Quotes');                
+                getQuotes('https://quotesbeta.tugaskelas.my.id/index.php/quotes/q/my_quote/'+sessionStorage.getItem("nim"),'My Quotes');                
             })
 
             $("#modal-input-form-image").change(function() { 
@@ -293,7 +293,7 @@
                 }) 
                 .done(function( data ) { 
                     console.log(data); 
-                    getQuotes('https://quotesbeta.tugaskelas.my.id/index.php/quotes/q/my_quote/'+sessionStorage.getItem("nim"),'My Quotes'); 
+                    getQuotes('https://quotesbeta.tugaskelas.my.id/index.php/quotes/q/my_quote/'+sessionStorage.getItem("2110nim2242"),'My Quotes'); 
                     $('#quoteInputModal').modal('toggle'); 
                 }); 
             }
