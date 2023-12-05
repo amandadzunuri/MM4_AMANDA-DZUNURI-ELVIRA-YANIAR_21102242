@@ -28,7 +28,7 @@
                         </ul> 
                     </div> 
                 </div> 
-
+                
             </div> 
         </div> 
         <div class="navbar navbar-dark bg-dark box-shadow"> 
@@ -50,6 +50,7 @@
                     <h1 class="jumbotron-heading">Album example</h1> 
                     <p class="lead text-muted">Something short and leading about the collection below—its contents, the creator, etc. Make it short and sweet, but not too short so folks don't simply skip over it entirely.</p> 
                     <p>
+                        <a href="#" class="btn btn-success my-2" onClick = "callInputModal('Add Quote')">Add Quote</a> 
                         <a href="#" class="btn btn-primary my-2" onClick = "getQuotes('https://quotesbeta.tugaskelas.my.id/index.php/quotes/q/my_quote/21102242','My Quotes')">My Quotes</a> 
                         <a href="#" class="btn btn-primary my-2" onClick = "getQuotes('https://quotesbeta.tugaskelas.my.id/index.php/quotes/q/class_id/4','Class Quotes')">Class Quotes</a> 
                         <a href="#" class="btn btn-primary my-2" onClick = "getQuotes('https://quotesbeta.tugaskelas.my.id/index.php/quotes','All Quotes')">All Quotes</a>
@@ -59,8 +60,8 @@
             <div class="album py-5 bg-light"> 
                 <div class="container"> 
                     <h1 class="jumbotron-heading" id="title-page"></h1> 
-
-
+                    
+                    
                     <div class="row"  id="quote-items"> 
                         <div class="col-md-4 quote-item" style="display: none;" id="quote-item"> 
                             <div class="card mb-4 box-shadow"> 
@@ -69,8 +70,11 @@
                                     <b class="card-title" id="card-title">Title</b><br> 
                                     <small class="text-muted" id="card-name">Nama</small> 
                                     <p class="card-text" id="card-description">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p> 
-                                    <div class="d-flex justify-content-between align-items-center"> <div class="btn-group"> 
-                                        <button type="button" id="view-detail" class="btn btn-sm btn-outline-secondary">View</button> 
+                                    <div class="d-flex justify-content-between align-items-center"> 
+                                        <div class="btn-group"> 
+                                        <button type="button" id="view-detail" class="btn btn-sm btn-outline-secondary">View</button>
+                                        <button type="button" id="edit-detail" class="btn btn-sm btn-outline-primary">Edit</button>
+                                        <button type="button" id="delete-quote" class="btn btn-sm btn-outline-danger">Delete</button> 
                                     </div> 
                                     <small class="text-muted" id="card-date">9 mins</small> 
                                 </div> 
@@ -172,7 +176,25 @@
                     reader.readAsDataURL(input.files[0]); 
                 } 
             }
+        
+            function callInputModal(title,name="",description="",image="",quote_id=""){ 
+                $('#quoteInputModal').modal('show'); $( "#modal-input-title" ).html(title); 
+                $( "#modal-input-form-quote-id" ).val(quote_id); 
+                $( "#modal-input-form-student-id" ).val(sessionStorage.getItem("student_id")); 
+                $( "#modal-input-form-title" ).val(name); $( "#modal-input-form-image" ).val(''); 
+                $( "#modal-input-form-description" ).val(description);
+                $( "#modal-input-show-img" ).attr('src',image); 
+            }
+            function callModal(title,name,image,description){ 
+                $('#quoteDetailModal').modal('show'); 
+                $( "#modal-title" ).html(title); 
+                $( "#modal-name" ).html(name); 
+                $( "#modal-description" ).html(description); 
+                $( "#modal-img" ).attr('src',image); 
+            }
             function getQuotes(url, title){
+                //var url = "https://quotesbeta.tugaskelas.my.id/index.php/quotes"; 
+                $.ajaxSetup({ cache: false });
                 var item = $( "#quote-item" ); 
                 $("#title-page").html(title); 
                 $( ".quote-item" ).remove(); 
@@ -191,13 +213,20 @@
                     myData = JSON.parse(data); 
                     for (i = 0; i < myData['quotes'].length; i++) { 
                         var item = $( "#quote-item" ).clone(); 
-                        item.find('#card-description').html(myData['quotes'][i].description);
+                        item.find('#card-description').html(myData['quotes'][i].description.replace('"','\"').replace(/\n/g,'<br />'));
                         item.removeAttr( "style" );
                         item.find('#card-img').attr('src', myData['quotes'][i].images); 
                         item.find('#card-title').html(myData['quotes'][i].title); 
                         item.find('#card-name').html(myData['quotes'][i].name + " (" + myData['quotes'][i].class + ")"); 
                         item.find('#card-date').html(myData['quotes'][i].updated); 
-                        item.find('#view-detail').attr("onClick","callModal('"+myData['quotes'][i].title+"','"+myData['quotes'][i].name+ " (" + myData['quotes'][i].class + ")','"+myData['quotes'][i].images+"','"+myData['quotes'][i].description+"')"); 
+                        item.find('#view-detail').attr("onClick","callModal(\""+myData['quotes'][i].title+"\",\""+myData['quotes'][i].name+ " (" + myData['quotes'][i].class + ")\",\""+myData['quotes'][i].images+"\",\""+myData['quotes'][i].description.replace('"','\\"').replace(/(\r\n|\n|\r)/gm,'<br>')+"\")"); 
+                        item.find('#delete-quote').attr("onClick","deleteQuote("+myData['quotes'][i].quote_id+",'"+myData['quotes'][i].title+"')"); 
+                        item.find('#edit-detail').attr("onClick","callInputModal(\"Edit Quote\",\""+myData['quotes'][i].title+"\",\""+myData['quotes'][i].description.replace('"','\\"').replace(/(\r\n|\n|\r)/gm,'<br>')+"\",\""+myData['quotes'][i].images+"\",\""+myData['quotes'][i].quote_id+"\")");
+                        if(sessionStorage.getItem("student_id")!=myData['quotes'][i].student_id){ 
+                            item.find('#edit-detail').attr("style","display: none;"); 
+                            item.find('#delete-quote').attr("style","display: none;");
+                        }
+                        
                         item.appendTo("#quote-items"); 
                     }
                 });
@@ -223,7 +252,7 @@
                     updateQuote(this); 
                 } 
             });
-
+            
             function insertQuote(data){ 
                 $.ajax({ 
                     type: 'POST', 
@@ -244,6 +273,49 @@
                     getQuotes('https://quotesbeta.tugaskelas.my.id/index.php/quotes/q/my_quote/'+sessionStorage.getItem("nim"),'My Quotes'); 
                     $('#quoteInputModal').modal('toggle'); 
                 }); 
+            }
+
+            function updateQuote(data){ 
+                console.log(data); 
+                $.ajax({ 
+                    type: 'POST', 
+                    url: "https://quotesbeta.tugaskelas.my.id/index.php/quotes/q/edit/1", 
+                    dataType: "JSON", 
+                    data: new FormData(data), 
+                    processData: false, 
+                    contentType: false, 
+                    beforeSend: function( xhr ) { 
+                        xhr.overrideMimeType( "text/plain; charset=x-user-defined" ); 
+                    }, 
+                    error: function(xhr, status, error) { 
+                        console.log(xhr); 
+                    } 
+                }) 
+                .done(function( data ) { 
+                    console.log(data); 
+                    getQuotes('https://quotesbeta.tugaskelas.my.id/index.php/quotes/q/my_quote/'+sessionStorage.getItem("2110nim2242"),'My Quotes'); 
+                    $('#quoteInputModal').modal('toggle'); 
+                }); 
+            }
+
+            function deleteQuote(quote_id,title){ 
+                var r = confirm("Delete "+title+"?"); 
+                if (r == true) { 
+                    $.ajax({ 
+                        type: 'DELETE', 
+                        url: "https://quotesbeta.tugaskelas.my.id/index.php/quotes/q/quote_id/"+quote_id, 
+                        beforeSend: function( xhr ) { 
+                            xhr.overrideMimeType( "text/plain; charset=x-user-defined" ); 
+                        }, 
+                        error: function(xhr, status, error) { 
+                            console.log(xhr); 
+                        } 
+                    }) 
+                    .done(function( data ) { 
+                        console.log(data); 
+                        getQuotes('https://quotesbeta.tugaskelas.my.id/index.php/quotes/q/my_quote/'+sessionStorage.getItem("nim"),'My Quotes'); 
+                    }); 
+                } 
             }
         </script>
     </body> 
