@@ -2,7 +2,7 @@
     include "koneksi.php";
     $qkelas = "select * from kelas";
     $data_kelas = $conn->query($qkelas);
-    $qmahasiswa = "select*from mahasiswa left join kelas on kelas.kelas_id = mahasiswa.kelas_id";
+    $qmahasiswa = "select * from mahasiswa";
     $data_mahasiswa = $conn->query($qmahasiswa); 
     
     $qselect_mahasiswa = "select*from mahasiswa left join kelas on kelas.kelas_id = mahasiswa.kelas_id where mahasiswa_id = ".$_GET['mahasiswa_id'];
@@ -23,6 +23,7 @@
     <title>Form Mahasiswa</title>
 
     <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link href="../node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Favicons -->
@@ -47,6 +48,11 @@
         user-select: none;
       }
 
+      .img-mahasiswa {
+        width: 75px;
+        height: 100px;
+      }
+
       @media (min-width: 768px) {
         .bd-placeholder-img-lg {
           font-size: 3.5rem;
@@ -64,21 +70,28 @@
 
       <div class="row">
         <div class="col-md-4 order-md-2 mb-4">
-          Konten Data
+        <?php
+            $jumlah_mahasiswa = $data_mahasiswa->num_rows; //Mengambil jumlah data mahasiswa
+          ?>
           <h4 class="d-flex justify-content-between align-items-center mb-3">
                 <span class="text-muted">Data Mahasiswa</span>
                 <span class="badge badge-secondary badge-pill">0</span>
+                <?php echo $jumlah_mahasiswa; ?>
             </h4>
             <?php
                 foreach($data_mahasiswa as $index => $value){
+                  $q_kelas_by_id = "SELECT * FROM kelas WHERE kelas_id = " . $value['kelas_id'];
+                  $result_kelas = $conn->query($q_kelas_by_id);
+                  $kelas = $result_kelas->fetch_assoc();
             ?>
             <ul class="list-group mb-3">
                 <li class="list-group-item d-flex justify-content-between lh-condensed">
+                  <img src="<?php echo $value['foto']; ?>" alt="Foto Mahasiswa" class="img-thumbnail img-mahasiswa">
                     <div>
                       <h6 class="my-0"><?php echo $value['nama_lengkap'] ?></h6>
                       <small class="text-muted"><?php echo $value['alamat'] ?></small>
                     </div>
-                    <span class="text-muted"><?php echo $value['kelas_id'] ?></span>
+                    <span class="text-muted"><?php echo $kelas['nama'] ?></span>
                     <a href="update_form.php?mahasiswa_id=<?php echo $value['mahasiswa_id'] ?>" type="button" class="close">
                       <span class="fa fa-pencil"></span>
                       </a> 
@@ -92,8 +105,11 @@
             ?>
         </div>
         <div class="col-md-8 order-md-1">
-          <h4 class="mb-3">Input Data</h4> 
-          <form action ="simpan_mahasiswa.php" method="POST" >
+          <h4 class="mb-3">Edit Data</h4> 
+          <div id="readMessage">
+            <?php include "read_message.php" ?>
+          </div>
+          <form action ="simpan_mahasiswa.php" method="POST" enctype="multipart/form-data" >
           <input type="hidden" name="mahasiswa_id" value="<?php echo $data_select_mahasiswa['mahasiswa_id'] ?>"> 
             <div class="mb-3"> 
                 <label for="nama_lengkap">Nama Lengkap</label> 
@@ -121,6 +137,13 @@
                         } 
                     ?> 
                 </select> 
+            </div>
+            <input type="hidden" name="foto_lama" value="<?php echo $data_select_mahasiswa['foto']; ?>">
+            <div class="mb-3">
+              <!-- menambahkan fungsi untuk upload foto -->
+                <label for="foto">Foto</label><br>
+                <img src="<?php echo $data_select_mahasiswa['foto']; ?>" alt="Foto Mahasiswa" class="img-thumbnail img-mahasiswa">
+                <input type="file" class="form-control-file" id="foto" name="foto" accept="image/*">
             </div> 
             <div class="row"> 
             </div> 
@@ -129,10 +152,7 @@
             <a href="index.php" class="btn btn-warning btn-lg btn-block" type="submit">Batal</a> 
         </form>
         </div>
-
-
       </div>
-
     </div>
   <footer class="my-5 pt-5 text-muted text-center text-small">
     <p class="mb-1">&copy; 2017-2019 Company Name</p>
