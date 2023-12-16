@@ -16,6 +16,7 @@
     <title>Form Mahasiswa</title>
 
     <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link href="../node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Favicons -->
@@ -56,26 +57,43 @@
 
       <div class="row">
         <div class="col-md-4 order-md-2 mb-4">
-          Konten Data
+          <?php
+            $jumlah_mahasiswa = $data_mahasiswa->num_rows; //Mengambil jumlah data mahasiswa
+          ?>
           <h4 class="d-flex justify-content-between align-items-center mb-3">
-                <span class="text-muted">Data Mahasiswa</span>
-                <span class="badge badge-secondary badge-pill">0</span>
-            </h4>
-            <?php
-                foreach($data_mahasiswa as $index => $value){
-            ?>
-            <ul class="list-group mb-3">
-                <li class="list-group-item d-flex justify-content-between lh-condensed">
-                    <div>
-                        <h6 class="my-0"><?php echo $value['nama_lengkap'] ?></h6>
-                        <small class="text-muted"><?php echo $value['alamat'] ?></small>
-                    </div>
-                    <span class="text-muted"><?php echo $value['kelas_id'] ?></span>
-                </li>
-            </ul>
-            <?php
-                }
-            ?>
+            <span class="text-muted">Data Mahasiswa</span> 
+            <span class="badge badge-secondary badge-pill" style="background-color:dimgray; border-radius: 50%;">
+              <?php echo $jumlah_mahasiswa; ?>
+            </span> 
+          </h4>
+          <?php
+            foreach($data_mahasiswa as $index => $value){
+              $q_kelas_by_id = "SELECT * FROM kelas WHERE kelas_id = " . $value['kelas_id'];
+              $result_kelas = $conn->query($q_kelas_by_id);
+              $kelas = $result_kelas->fetch_assoc();
+          ?>
+          <ul class="list-group mb-3">
+            <li class="list-group-item d-flex justify-content-between lh-condensed">
+              <div>
+                <h6 class="my-0"><?php echo $value['nama_lengkap'] ?></h6>
+                <small class="text-muted"><?php echo $value['alamat'] ?></small>
+              </div>
+              <span class="text-muted"><?php echo $kelas['nama'] ?></span>
+            </li>
+              
+              <div  class="mt-auto bd-highlight">
+                <a href="hapus_data.php?mahasiswa_id=<?php echo $value['mahasiswa_id'] ?>" type="button" class="close btn-sm">
+                  <span class="fa fa-trash"></span>
+                </a>
+                <a href="update_form.php?mahasiswa_id=<?php echo $value['mahasiswa_id'] ?>" type="button" class="close btn-sm">
+                  <span class="fa fa-pencil"></span>
+                </a> 
+              </div>
+            </li>
+          </ul>
+          <?php
+            }
+          ?>
         </div>
         <div class="col-md-8 order-md-1">
           <h4 class="mb-3">Input Data</h4> 
