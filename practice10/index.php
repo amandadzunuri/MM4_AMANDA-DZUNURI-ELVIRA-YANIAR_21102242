@@ -143,8 +143,9 @@
             <button class="btn btn-primary btn-lg btn-block" type="submit">Simpan Data</button>
           </form>
         </div>
-      </div>
 
+
+      </div>
     </div>
   <footer class="my-5 pt-5 text-muted text-center text-small">
     <p class="mb-1">&copy; IT Telkom Purwokerto</p>
