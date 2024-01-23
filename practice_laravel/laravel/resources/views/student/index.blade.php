@@ -12,7 +12,7 @@
     <div class="row">
         <div class="col-12">
         <div class="py-4 d-flex justify-content-end align-items-center">
-            <h2 class="mr-auto">Tabel Mahasiswa</h2>
+            <h2 class="mr-auto me-4">Tabel Mahasiswa</h2>
             <a href="{{ route('student.create') }}" class="btn btn-primary">
                 Tambah Mahasiswa
             </a>
@@ -27,6 +27,7 @@
             <thead>
             <tr>
                 <th>#</th>
+                <th>Foto</th>
                 <th>Nim</th>
                 <th>Nama</th>
                 <th>Jenis Kelamin</th>
@@ -38,6 +39,7 @@
             @forelse ($students as $mahasiswa)
             <tr>
                 <th>{{$loop->iteration}}</th>
+                <td><img height="30px" src="{{url('')}}/{{$mahasiswa->image}}" class="rounded" alt=""></td>
                 <td><a href="{{ route('student.show',['student' => $mahasiswa->id]) }}">{{$mahasiswa->nim}}</a></td>
                 <td>{{$mahasiswa->name}}</td>
                 <td>{{$mahasiswa->gender == 'P'?'Perempuan':'Laki-laki'}}</td>
