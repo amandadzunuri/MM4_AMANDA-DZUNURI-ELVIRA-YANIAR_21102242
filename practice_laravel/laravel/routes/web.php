@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\StudentController;
+use App\Http\Controllers\StudentAPIController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AdminLTEController;
 use App\Http\Controllers\AdminLTEStudentController;
@@ -56,3 +57,4 @@ Route::get('/adminlte/index', [AdminLTEController::class,'index'])
 
 Route::get('/adminlte/student/create', [AdminLTEStudentController::class,'create'])
 ->name('adminlte.student.create');
+
